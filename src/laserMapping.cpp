@@ -80,7 +80,7 @@ string imu_frame = "base_link";
 bool debugMode;
 
 // pcd loading
-double voxel_size = 1.0;
+double visualize_voxel_size = 1.0;
 bool map_pub;
 
 /*** Log File Handler ***/
@@ -963,7 +963,7 @@ void publishMapThread()
 
             pcl::VoxelGrid<PointType> mapFilter; // for global map visualization
             PointCloudXYZI::Ptr featsFromMapDS(new PointCloudXYZI());
-            mapFilter.setLeafSize(voxel_size, voxel_size, voxel_size); // for global map visualization
+            mapFilter.setLeafSize(visualize_voxel_size, visualize_voxel_size, visualize_voxel_size); // for global map visualization
             mapFilter.setInputCloud(featsFromMap);
             mapFilter.filter(*featsFromMapDS);   
             // cout<<"after filtering: "<<featsFromMapDS->size()<<endl;
@@ -1038,7 +1038,7 @@ int main(int argc, char** argv)
     {
         nh.param<string>("mapping/pcd_path", pcd_path,"");
         nh.param<vector<double>>("mapping/initial_pose", initial_pose, vector<double>());
-        nh.param<double>("mapping/voxel_size", voxel_size, 1.0);
+        nh.param<double>("mapping/visualize_voxel_size", visualize_voxel_size, 1.0);
     }
         
     cout<<"p_pre->lidar_type "<<p_pre->lidar_type<<endl;
@@ -1129,7 +1129,7 @@ int main(int argc, char** argv)
 
         pcl::VoxelGrid<PointType> mapFilter; // for global map visualization
         PointCloudXYZI::Ptr featsFromMapDS(new PointCloudXYZI());
-        mapFilter.setLeafSize(voxel_size, voxel_size, voxel_size); // for global map visualization
+        mapFilter.setLeafSize(visualize_voxel_size, visualize_voxel_size, visualize_voxel_size); // for global map visualization
         mapFilter.setInputCloud(featsFromMap);
         mapFilter.filter(*featsFromMapDS);   
         cout<<"after filtering: "<<featsFromMapDS->size()<<endl;

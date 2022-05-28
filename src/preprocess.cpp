@@ -29,6 +29,8 @@ Preprocess::Preprocess()
   jump_down_limit = cos(jump_down_limit/180*M_PI);
   cos160 = cos(cos160/180*M_PI);
   smallp_intersect = cos(smallp_intersect/180*M_PI);
+
+  pcl::console::setVerbosityLevel(pcl::console::L_ERROR); // no need for warning, it has been handled
 }
 
 Preprocess::~Preprocess() {}
@@ -65,7 +67,7 @@ void Preprocess::process(const sensor_msgs::PointCloud2::ConstPtr &msg, PointClo
     printf("Error LiDAR Type");
     break;
   }
-  *pcl_out = pl_surf;
+  *pcl_out = pl_surf; // only need surf points with timestamp!
 }
 
 void Preprocess::avia_handler(const livox_ros_driver::CustomMsg::ConstPtr &msg)
@@ -330,12 +332,13 @@ void Preprocess::velodyne_handler(const sensor_msgs::PointCloud2::ConstPtr &msg)
     {
       // cout << pl_orig.points[plsize - 1].time << endl;
       given_offset_time = true;
+      cout<<"off time is not given "<<endl;
     }
     else
     {
       given_offset_time = false;
       double yaw_first = atan2(pl_orig.points[0].y, pl_orig.points[0].x) * 57.29578;
-      double yaw_end  = yaw_first; // useless?
+      double yaw_end  = yaw_first; 
       // float angle = 
       // int layer_first = 0;
       // int layer_first = pl_orig.points[0].ring;
@@ -349,6 +352,8 @@ void Preprocess::velodyne_handler(const sensor_msgs::PointCloud2::ConstPtr &msg)
           break;
         }
       }
+      cout<<"yaw fisrt and end: "<<yaw_first<<" "<<yaw_end<<endl;
+      // estimate timestamp based on yaw angle!
     }
 
     if(feature_enabled)
@@ -434,8 +439,7 @@ void Preprocess::velodyne_handler(const sensor_msgs::PointCloud2::ConstPtr &msg)
       for (int i = 0; i < plsize; i++)
       {
         PointType added_pt;
-        // cout<<"!!!!!!"<<i<<" "<<plsize<<endl;
-        
+        // cout<<"!!!!!!"<<i<<" "<<plsize<<endl;      
         added_pt.normal_x = 0;
         added_pt.normal_y = 0;
         added_pt.normal_z = 0;

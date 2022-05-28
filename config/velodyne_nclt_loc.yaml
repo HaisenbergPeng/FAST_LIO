@@ -36,16 +36,16 @@ mapping:
     # for loc
     load_pcd: true
     pcd_path: /mnt/sdb/Datasets/NCLT/datasets/roll/2012-01-15-gt/map_pcd/SurfMap.pcd
-    initial_pose: [0.019280939, 0.004926005, -1.755148225, -1.126196628, -3.182984251, 0.737359681] #20120511
-    # initial_pose: [-0.023064531, 0.006521815, -0.123438711, 75.34987256, 108.1539385, -3.290657831] # 20120115
+    # initial_pose: [0.019280939, 0.004926005, -1.755148225, -1.126196628, -3.182984251, 0.737359681] #20120511
+    initial_pose: [-0.023064531, 0.006521815, -0.123438711, 75.34987256, 108.1539385, -3.290657831] # 20120115
     # initial_pose: [-0.017984725855664, 0.012800135555456, -0.239421644654498,  75.520827533362393, 108.443935840162752, -3.291299069412723] # 20120202
     # initial_pose: [-0.017984725855664, 0.012800135555456, -0.239421644654498,-167.687, -517.768,  11.3285] # at 1450.08sec
     runtime_pos_log_enable: true
-    voxel_size: 2.0
+    visualize_voxel_size: 2.0
     # 1450.08 -0.490943  -4.28384  -164.767 -167.687 -517.768  11.3285
 
 publish:
-    map_pub: false # only show it for the 1st time
+    map_pub: false #false:  only show it for the 1st time for loc
     path_en:  true
     scan_publish_en:  true       # false: close all the point cloud output
     dense_publish_en: false       # false: low down the points number in a global-frame point clouds scan.

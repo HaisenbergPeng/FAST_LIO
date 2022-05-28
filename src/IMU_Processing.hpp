@@ -378,7 +378,7 @@ void ImuProcess::Process(vector<double> initial_pose,const MeasureGroup &meas,  
       cov_acc *= pow(G_m_s2 / mean_acc.norm(), 2);
       imu_need_init_ = false;
 
-      cov_acc = cov_acc_scale;
+      cov_acc = cov_acc_scale; //use preset values(wierd coding): must be finding out IMU_init is not stable!
       cov_gyr = cov_gyr_scale;
       ROS_INFO("IMU Initial Done");
       // ROS_INFO("IMU Initial Done: Gravity: %.4f %.4f %.4f %.4f; state.bias_g: %.4f %.4f %.4f; acc covarience: %.8f %.8f %.8f; gry covarience: %.8f %.8f %.8f",\

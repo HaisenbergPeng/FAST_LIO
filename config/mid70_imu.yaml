@@ -24,7 +24,7 @@ mapping:
     det_range:     260.0
     extrinsic_est_en:  true      # true: enable the online estimation of IMU-LiDAR extrinsic
     runtime_pos_log_enable: true
-    voxel_size: 0.4 # for visulizing global map
+    visualize_voxel_size: 0.4 # for visulizing global map
     # for hilti, lidar_2_imu
     extrinsic_T: [-0.0030507, -0.021994, 0.15076]
     extrinsic_R:  [0.99998, 0.0024556, -0.0065197, 0.0024579, -1, 0.00033094, -0.0065188, -0.00034696, -0.99998]
