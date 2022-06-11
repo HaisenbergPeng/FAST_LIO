@@ -64,7 +64,7 @@
 #define LASER_POINT_COV     (0.001)
 #define MAXN                (720000)
 #define PUBFRAME_PERIOD     (20)
-
+#define MP_EN 0
 /*** Publishers ***/
 ros::Subscriber sub_pcl;
 ros::Subscriber sub_imu;
@@ -84,7 +84,7 @@ double visualize_voxel_size = 1.0;
 bool map_pub;
 
 /*** Log File Handler ***/
-FILE *fp;
+FILE *fp,*fp_time;
 ofstream fout_pre, fout_out, fout_dbg;
 
 /*** variables definition ***/
@@ -718,6 +718,8 @@ void h_share_model(state_ikfom &s, esekfom::dyn_share_datastruct<double> &ekfom_
                 normvec->points[i].z = pabcd(2);
                 normvec->points[i].intensity = pd2;
                 res_last[i] = abs(pd2);
+
+
             }
         }
     }
@@ -774,7 +776,7 @@ void h_share_model(state_ikfom &s, esekfom::dyn_share_datastruct<double> &ekfom_
         /*** Measuremnt: distance to the closest surface/corner ***/
         ekfom_data.h(i) = -norm_p.intensity;
     }
-    solve_time += omp_get_wtime() - solve_start_;
+    solve_time += omp_get_wtime() - solve_start_; 
 }
 
 void run(){
@@ -916,18 +918,11 @@ void run(){
                 aver_time_incre = aver_time_incre * (frame_num - 1)/frame_num + (kdtree_incremental_time)/frame_num;
                 aver_time_solve = aver_time_solve * (frame_num - 1)/frame_num + (solve_time + solve_H_time)/frame_num;
                 aver_time_const_H_time = aver_time_const_H_time * (frame_num - 1)/frame_num + solve_time / frame_num;
-                T1[time_log_counter] = Measures.lidar_beg_time;
-                s_plot[time_log_counter] = t5 - t0;
-                s_plot2[time_log_counter] = feats_undistort->points.size();
-                s_plot3[time_log_counter] = kdtree_incremental_time;
-                s_plot4[time_log_counter] = kdtree_search_time;
-                s_plot5[time_log_counter] = kdtree_delete_counter;
-                s_plot6[time_log_counter] = kdtree_delete_time;
-                s_plot7[time_log_counter] = kdtree_size_st;
-                s_plot8[time_log_counter] = kdtree_size_end;
-                s_plot9[time_log_counter] = aver_time_consu;
-                s_plot10[time_log_counter] = add_point_size;
+
                 time_log_counter ++;
+                // solve_time only takes 1ms...
+                fprintf(fp_time,"%0.8f %d %0.8f %0.8f %d\n",Measures.lidar_beg_time,(int)feats_undistort->points.size(),aver_time_icp,aver_time_solve,(int)effct_feat_num);
+
                 // printf("[ mapping ]: time: IMU + Map + Input Downsample: %0.6f ave match: %0.6f ave solve: %0.6f  ave ICP: %0.6f  map incre: %0.6f ave total: %0.6f icp: %0.6f construct H: %0.6f \n",t1-t0,aver_time_match,aver_time_solve,t3-t1,t5-t3,aver_time_consu,aver_time_icp, aver_time_const_H_time);
                 V3D rot = SO3ToEuler(state_point.rot);
                 fout_out << setw(20) << Measures.lidar_beg_time - first_lidar_time << " " << rot.transpose() << " " << state_point.pos.transpose()<< " " << ext_euler.transpose() << " "<<state_point.offset_T_L_I.transpose()<<" "<< state_point.vel.transpose() \
@@ -1076,11 +1071,15 @@ int main(int argc, char** argv)
 
     string pos_log_dir = root_dir + "/Log/pos_log.txt";
     
+    string time_log_dir = root_dir + "/Log/fast_lio_time_log.txt";
+    fp_time = fopen(time_log_dir.c_str(),"w");
+
     fp = fopen(pos_log_dir.c_str(),"w");
     cout<<"pose output: "<<runtime_pos_log<<endl;
     fout_pre.open(DEBUG_FILE_DIR("mat_pre.txt"),ios::out); // state values before opti.
     fout_out.open(DEBUG_FILE_DIR("mat_out.txt"),ios::out);// state values after opti.
     fout_dbg.open(DEBUG_FILE_DIR("dbg.txt"),ios::out); // nothing
+
     if (fout_pre && fout_out)
         cout << "~~~~"<<ROOT_DIR<<" file opened" << endl;
     else
@@ -1155,7 +1154,8 @@ int main(int argc, char** argv)
     fout_out.close();
     fout_pre.close();
     // it won't be displayed if you ctrl+c, but "rosnode kill -a" can
-                    /**************** save map ****************/
+
+    /**************** save map ****************/
     if (pcd_save_en && !featsFromMap->empty())
     {
         string file_name = string("map.pcd");
@@ -1165,24 +1165,6 @@ int main(int argc, char** argv)
         pcd_writer.writeBinary(all_points_dir, *featsFromMap);
     }
     cout<<"laserMapping process is over "<<endl; 
-
-    // if (runtime_pos_log)
-    // {
-    //     vector<double> t, s_vec, s_vec2, s_vec3, s_vec4, s_vec5, s_vec6, s_vec7;    
-    //     FILE *fp2;
-    //     string log_dir = root_dir + "/Log/fast_lio_time_log.csv";
-    //     fp2 = fopen(log_dir.c_str(),"w");
-    //     fprintf(fp2,"time_stamp, total time, scan point size, incremental time, search time, delete size, delete time, tree size st, tree size end, add point size, preprocess time\n");
-    //     for (int i = 0;i<time_log_counter; i++){
-    //         fprintf(fp2,"%0.8f,%0.8f,%d,%0.8f,%0.8f,%d,%0.8f,%d,%d,%d,%0.8f\n",T1[i],s_plot[i],int(s_plot2[i]),s_plot3[i],s_plot4[i],int(s_plot5[i]),s_plot6[i],int(s_plot7[i]),int(s_plot8[i]), int(s_plot10[i]), s_plot11[i]);
-    //         t.push_back(T1[i]);
-    //         s_vec.push_back(s_plot9[i]);
-    //         s_vec2.push_back(s_plot3[i] + s_plot6[i]);
-    //         s_vec3.push_back(s_plot4[i]);
-    //         s_vec5.push_back(s_plot[i]);
-    //     }
-    //     fclose(fp2);
-    // }
 
     return 0;
 }

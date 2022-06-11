@@ -332,10 +332,11 @@ void Preprocess::velodyne_handler(const sensor_msgs::PointCloud2::ConstPtr &msg)
     {
       // cout << pl_orig.points[plsize - 1].time << endl;
       given_offset_time = true;
-      cout<<"off time is not given "<<endl;
+      
     }
     else
     {
+      cout<<"off time is not given "<<endl;
       given_offset_time = false;
       double yaw_first = atan2(pl_orig.points[0].y, pl_orig.points[0].x) * 57.29578;
       double yaw_end  = yaw_first; 
@@ -352,7 +353,7 @@ void Preprocess::velodyne_handler(const sensor_msgs::PointCloud2::ConstPtr &msg)
           break;
         }
       }
-      cout<<"yaw fisrt and end: "<<yaw_first<<" "<<yaw_end<<endl;
+      // cout<<"yaw first and end: "<<yaw_first<<" "<<yaw_end<<endl;
       // estimate timestamp based on yaw angle!
     }
 
