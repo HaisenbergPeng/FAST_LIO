@@ -490,6 +490,12 @@ void map_incremental()
     }
 
     double st_time = omp_get_wtime();
+
+// 2012-01-08-bin-start.bag error
+//     #12 0x00000000004389ef in map_incremental ()
+//     at /home/haisenberg/Documents/ROLL/src/FAST_LIO/src/laserMapping.cpp:493
+// 493	    add_point_size = ikdtree.Add_Points(PointToAdd, true);
+
     add_point_size = ikdtree.Add_Points(PointToAdd, true);
 
     ikdtree.Add_Points(PointNoNeedDownsample, false); 

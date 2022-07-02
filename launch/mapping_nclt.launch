@@ -15,7 +15,7 @@
     <!-- for localization, no need for 1000 but 100 is too small -->
     <param name="cube_side_length" type="double" value="600" />  
     
-    <node pkg="fast_lio" type="fastlio_mapping" name="laserMapping" output="screen" /> 
+    <node pkg="fast_lio" type="fastlio_mapping" name="laserMapping" output="screen" launch-prefix="gdb -ex run --args"/> 
 
     <group if="$(arg rviz)">
     <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find fast_lio)/rviz_cfg/loam_livox.rviz" />
