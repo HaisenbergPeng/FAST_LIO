@@ -1075,9 +1075,9 @@ int main(int argc, char** argv)
 
     /*** debug record ***/
 
-    string pos_log_dir = root_dir + "/Log/pos_log.txt";
+    string pos_log_dir = DEBUG_FILE_DIR("pos_log.txt");
     
-    string time_log_dir = root_dir + "/Log/fast_lio_time_log.txt";
+    string time_log_dir = DEBUG_FILE_DIR("fast_lio_time_log.txt");
     fp_time = fopen(time_log_dir.c_str(),"w");
 
     fp = fopen(pos_log_dir.c_str(),"w");
