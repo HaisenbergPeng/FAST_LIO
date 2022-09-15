@@ -1,3 +1,7 @@
+## Modified
+1. Adjusted for localization by adding map loading and initial pose setting
+2. Add some yaml files specified for some popular datasets, such as NCLT, Usyd. 
+
 ## Related Works
 
 1. [ikd-Tree](https://github.com/hku-mars/ikd-Tree): A state-of-art dynamic KD-Tree for 3D kNN search.
