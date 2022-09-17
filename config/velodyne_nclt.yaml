@@ -32,7 +32,7 @@ mapping:
     #               0, -1, 0]
     runtime_pos_log_enable: true
 publish:
-    map_pub: false
+    map_pub: true
     path_en:  true
     scan_publish_en:  true       # false: close all the point cloud output
     dense_publish_en: false       # false: low down the points number in a global-frame point clouds scan.
