@@ -906,7 +906,7 @@ void run(){
             map_incremental();
             t5 = omp_get_wtime();
             
-            // cout<<"path_en"<<path_en<<endl;
+            if(debugMode)  cout<<"path_en"<<path_en<<endl;
             /******* Publish points *******/
             if (path_en)                         publish_path(pubPath);
             if (scan_pub_en || pcd_save_en)      publish_frame_world(pubLaserCloudFull);
