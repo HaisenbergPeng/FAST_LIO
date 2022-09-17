@@ -3,8 +3,8 @@ filter_size_map: 0.4 # ikdtree voxel filter
 debugMode: false
 common:
     # lid_topic:  "/points_raw"
-    # lid_topic:  "/velodyne/front/points"
-    lid_topic:  "/velodyne_points"
+    lid_topic:  "/velodyne/front/points"
+    # lid_topic:  "/velodyne_points"
     imu_topic:  "/vn100/imu"
     time_sync_en: false         # ONLY turn on when external time synchronization is really not possible
     
