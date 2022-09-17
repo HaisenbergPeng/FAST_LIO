@@ -75,6 +75,8 @@ ros::Publisher pubLaserCloudMap;
 ros::Publisher pubOdomAftMapped;
 ros::Publisher pubPath;
 
+std::mutex getMap;
+
 // use imu as body frame
 string imu_frame = "base_link";
 bool debugMode;
@@ -496,9 +498,11 @@ void map_incremental()
 //     at /home/haisenberg/Documents/ROLL/src/FAST_LIO/src/laserMapping.cpp:493
 // 493	    add_point_size = ikdtree.Add_Points(PointToAdd, true);
 
+    getMap.lock();
     add_point_size = ikdtree.Add_Points(PointToAdd, true);
-
     ikdtree.Add_Points(PointNoNeedDownsample, false); 
+    getMap.unlock();
+
     add_point_size = PointToAdd.size() + PointNoNeedDownsample.size();
     kdtree_incremental_time = omp_get_wtime() - st_time;
 }
@@ -947,7 +951,7 @@ void run(){
 
 void publishMapThread()
 {
-    std::mutex getMap;
+
     ros::Rate rate(0.2);
     while(ros::ok())
     {
@@ -1125,7 +1129,8 @@ int main(int argc, char** argv)
 
                 // only visualize once
         double t_m1 = omp_get_wtime();
-        // getMap.lock();
+
+        getMap.lock();
         PointVector ().swap(ikdtree.PCL_Storage);
         ikdtree.flatten(ikdtree.Root_Node, ikdtree.PCL_Storage, NOT_RECORD);
         featsFromMap->clear();
@@ -1139,7 +1144,7 @@ int main(int argc, char** argv)
         mapFilter.filter(*featsFromMapDS);   
         cout<<"after filtering: "<<featsFromMapDS->size()<<endl;
         pcl::toROSMsg(*featsFromMapDS, laserCloudMap); // it is okay to not lock?
-        // getMap.unlock();
+        getMap.unlock();
 
         laserCloudMap.header.stamp = ros::Time().fromSec(lidar_end_time);
         laserCloudMap.header.frame_id = "camera_init";

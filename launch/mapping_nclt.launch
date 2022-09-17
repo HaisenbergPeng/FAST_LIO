@@ -14,7 +14,7 @@
     <param name="filter_size_surf" type="double" value="0.5" />
     <param name="filter_size_map" type="double" value="0.5" />
     <!-- for localization, no need for 1000 but 100 is too small -->
-    <param name="cube_side_length" type="double" value="600" />  
+    <param name="cube_side_length" type="double" value="1000" />  
     
     <node pkg="fast_lio" type="fastlio_mapping" name="laserMapping" output="screen"/> 
 

@@ -3,8 +3,8 @@ filter_size_map: 0.4 # ikdtree voxel filter
 debugMode: false
 common:
     # lid_topic:  "/points_raw"
-    # lid_topic:  "/velodyne/front/points"
-    lid_topic:  "/velodyne_points"
+    lid_topic:  "/velodyne/front/points"
+    # lid_topic:  "/velodyne_points"
     imu_topic:  "/vn100/imu"
     time_sync_en: false         # ONLY turn on when external time synchronization is really not possible
     
@@ -28,7 +28,7 @@ mapping:
     visualize_voxel_size: 1.0
     
 publish:
-    # map_pub: true
+    map_pub: true 
     path_en:  true
     scan_publish_en:  true       # false: close all the point cloud output
     dense_publish_en: false       # false: low down the points number in a global-frame point clouds scan.
