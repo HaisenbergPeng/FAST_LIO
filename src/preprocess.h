@@ -43,6 +43,15 @@ namespace velodyne_ros {
   };
 }  // namespace velodyne_ros
 
+POINT_CLOUD_REGISTER_POINT_STRUCT(velodyne_ros::Point,
+    (float, x, x)
+    (float, y, y)
+    (float, z, z)
+    (float, intensity, intensity)
+    (float, time, time)
+    (uint16_t, ring, ring)
+)
+
 namespace rslidar_ros {
   struct EIGEN_ALIGN16 Point {
       PCL_ADD_POINT4D;
@@ -51,14 +60,14 @@ namespace rslidar_ros {
       uint16_t ring;
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   };
-}  // namespace velodyne_ros
+}  // namespace rslidar_ros
 
-POINT_CLOUD_REGISTER_POINT_STRUCT(velodyne_ros::Point,
+POINT_CLOUD_REGISTER_POINT_STRUCT(rslidar_ros::Point,
     (float, x, x)
     (float, y, y)
     (float, z, z)
     (float, intensity, intensity)
-    (float, time, time)
+    (float, timestamp, timestamp)
     (uint16_t, ring, ring)
 )
 
