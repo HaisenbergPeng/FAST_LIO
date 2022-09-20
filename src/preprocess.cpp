@@ -532,7 +532,7 @@ void Preprocess::rslidar_handler(const sensor_msgs::PointCloud2::ConstPtr &msg)
     std::vector<int> scanID(plsize,-1);
     double time_start = pl_orig.points[0].timestamp;
 
-    cout<<setiosflags(ios::fixed)<<setprecision(6)<<"start: "<<time_start<<" end: "<<pl_orig.points.back().timestamp<<endl;
+    // cout<<setiosflags(ios::fixed)<<setprecision(6)<<"start: "<<time_start<<" end: "<<pl_orig.points.back().timestamp<<endl;
 
     for (uint i= 0; i<plsize;i++ ) 
     {
