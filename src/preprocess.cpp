@@ -63,9 +63,7 @@ void Preprocess::process(const sensor_msgs::PointCloud2::ConstPtr &msg, PointClo
     // cout << "velodyne out" << endl;
     break;
   case RSLIDAR:
-    // cout << "velodyne" << endl;
     rslidar_handler(msg);
-    // cout << "velodyne out" << endl;
     break;
   default:
     printf("Error LiDAR Type");
@@ -534,7 +532,7 @@ void Preprocess::rslidar_handler(const sensor_msgs::PointCloud2::ConstPtr &msg)
     std::vector<int> scanID(plsize,-1);
     double time_start = pl_orig.points[0].timestamp;
 
-    // cout<<time_start<<endl;
+    cout<<setiosflags(ios::fixed)<<setprecision(6)<<"start: "<<time_start<<" end: "<<pl_orig.points.back().timestamp<<endl;
 
     for (uint i= 0; i<plsize;i++ ) 
     {
@@ -576,7 +574,8 @@ void Preprocess::rslidar_handler(const sensor_msgs::PointCloud2::ConstPtr &msg)
     }
     else
     {
-      cout<<"off time is not given "<<endl;
+      static int warn_once2 = 0;
+      if(warn_once2++ == 0) cout<<"off time is not given!!! "<<endl;
       given_offset_time = false;
       double yaw_first = atan2(pl_orig.points[0].y, pl_orig.points[0].x) * 57.29578;
       double yaw_end  = yaw_first; 

@@ -52,12 +52,22 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(velodyne_ros::Point,
     (uint16_t, ring, ring)
 )
 
+			//	uint8 UINT8   = 2
+			//	uint8 INT16   = 3
+			//	uint8 UINT16  = 4
+			//	uint8 INT32   = 5
+			//	uint8 UINT32  = 6
+			//	uint8 FLOAT32 = 7
+			//	uint8 FLOAT64 = 8
+//查看rslidar消息fields
+// rostopic echo rslidar_points |grep -e name -C 2
+// what about 22:23 byte?
 namespace rslidar_ros {
   struct EIGEN_ALIGN16 Point {
-      PCL_ADD_POINT4D;
-      float intensity;
-      float timestamp;
+      PCL_ADD_POINT4D; // all float 4
+      uint8_t intensity;
       uint16_t ring;
+      double timestamp;
       EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   };
 }  // namespace rslidar_ros
@@ -66,9 +76,10 @@ POINT_CLOUD_REGISTER_POINT_STRUCT(rslidar_ros::Point,
     (float, x, x)
     (float, y, y)
     (float, z, z)
-    (float, intensity, intensity)
-    (float, timestamp, timestamp)
+    (uint8_t, intensity, intensity)
     (uint16_t, ring, ring)
+    (double, timestamp, timestamp)
+
 )
 
 //////////////////////////////////////////////////////
